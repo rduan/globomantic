@@ -1,3 +1,6 @@
 # docker image build --tag globomantics .
 
 #docker container run --detach --publish 3000:3000 globomantics
+
+# $(aws ecr get-login --no-include-email --region ap-southeast-1)
+#docker build -t 012862735759.dkr.ecr.ap-southeast-1.amazonaws.com/globomantics:$(git rev-parse HEAD) .
