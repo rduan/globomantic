@@ -1,1 +1,3 @@
 # docker image build --tag globomantics .
+
+#docker container run --detach --publish 3000:3000 globomantics
