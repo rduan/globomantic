@@ -65,7 +65,7 @@ class App extends Component {
       activeComponent = <FeaturedHouse house={this.state.featuredHouse}/>;
     return (
       <div className="container">
-        <Header subtitle = 'providing world wild houses'/>
+        <Header subtitle = 'Providing world wild houses'/>
         <HouseFilter 
           countries = {this.state.countries}
           filterHouses = {this.filterHouses}

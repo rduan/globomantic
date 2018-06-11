@@ -26,6 +26,29 @@ sudo -u jenkins ssh git@github.com
 ```
 sudo yum install -y git
 ```
+# setup EC2 to run app
+```
+#!/bin/bash
+sudo yum install docker -y
+sudo systemctl enable docker.service
+sudo systemctl start docker.service
 
+cat << EOF > start-globomantics
+$(aws ecr get-login --no-include-email --region ap-southeast-1)
+sudo docker run -p 3000:3000 012862735759.dkr.ecr.ap-southeast-1.amazonaws.com/globomantics:latest
+EOF
 
+sudo mv start-globomantics /var/lib/cloud/scripts/per-boot/start-globomantics
+sudo chmod +x /var/lib/cloud/scripts/per-boot/start-globomantics
+/var/lib/cloud/scripts/per-boot/start-globomantics
+```
 
+# set jenkins deployment
+```
+$(aws ecr get-login --no-include-email --region ap-southeast-1)
+docker pull 012862735759.dkr.ecr.ap-southeast-1.amazonaws.com/globomantics:$TAG_TO_DEPLOY
+docker tag 012862735759.dkr.ecr.ap-southeast-1.amazonaws.com/globomantics:$TAG_TO_DEPLOY \
+           012862735759.dkr.ecr.ap-southeast-1.amazonaws.com/globomantics:release
+docker push 012862735759.dkr.ecr.ap-southeast-1.amazonaws.com/globomantics:release
+aws ec2 reboot-instances --region ap-southeast-1 --instance-ids $EC2_INSTANCE
+```
